@@ -87,16 +87,9 @@ pub fn fix_upca(upc: &str) -> String {
     if upc.is_ascii() == false {
         panic!("Cannot operate on non-ASCII data");
     }
-    if fixed.len() < 12 {
-        let mut zpad: String = "0".to_string();
-        for _ in 0 .. 11 - fixed.len() {
-            zpad.push('0');
-        }
-        zpad.push_str(&fixed);
-        fixed = zpad;
-    } else if fixed.len() > 12 {
-        panic!("Could not fix UPC-A; length did not match")
-    }
+    assert!(fixed.len() <= 12, "Cannot fix UPC-A. Length is longer than 12.");
+    fixed = zero_pad(fixed, 12);
+    
     return fixed;
 }
 
