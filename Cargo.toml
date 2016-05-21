@@ -1,5 +1,5 @@
 [package]
-name = "upc"
+name = "upc_validate"
 version = "0.1.0"
 authors = ["Austin Hartzheim <inbox@austinhartzheim.me>"]
 
