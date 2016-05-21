@@ -1,5 +1,12 @@
+//! # upc_validate
+//!
+//! Performs validation and correction of UPC strings.
+
 use std::ascii::AsciiExt;
 
+/// Check that a UPC-A code is valid by confirming that:
+/// * It is made of 12 digits
+/// * The check-digit is correct
 fn check_upca(upc: &str) -> bool {
     let mut even: u8 = 0;
     let mut odd: u8 = 0;
@@ -43,18 +50,26 @@ fn check_upca(upc: &str) -> bool {
     return true;
 }
 
-fn fix_upca(upc: &str) -> &str {
-    let mut fixed : &str = upc.trim_left().trim_right();
+/// Attempt to fix invalid UPC codes by:
+/// * Stripping whitespace from the left and right sides
+/// * Zero-padding the UPC if it is less than 12 digits
+fn fix_upca(upc: &str) -> String {
+    let mut fixed = upc.trim_left().trim_right().to_string();
 
     if upc.is_ascii() == false {
         panic!("Cannot operate on non-ASCII data");
     }
-    if fixed.len() > 12 {
+    if fixed.len() < 12 {
+        let mut zpad: String = "0".to_string();
+        for _ in 0 .. 11 - fixed.len() {
+            zpad.push('0');
+        }
+        zpad.push_str(&fixed);
+        fixed = zpad;
+    } else if fixed.len() > 12 {
         panic!("Could not fix UPC-A; length did not match")
-    } else if fixed.len() < 12 {
-        
     }
-    &"00000000000"
+    return fixed;
 }
 
 #[cfg(test)]
@@ -95,5 +110,10 @@ mod tests {
     #[should_panic]
     fn fix_upca_non_ascii() {
         fix_upca(&"❤");
+    }
+
+    #[test]
+    fn fix_upca_needs_zero_padding() {
+        assert_eq!(fix_upca(&"0"), "000000000000".to_string());
     }
 }
