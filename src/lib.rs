@@ -31,6 +31,18 @@ fn compute_upca_check_digit(upc: &[u8]) -> u8 {
     return check;
 }
 
+fn zero_pad(upc: String, size: usize) -> String {
+    if upc.len() >= size {
+        return upc;
+    }
+    let mut padded = String::with_capacity(size);
+    for _ in 0 .. size - upc.len() {
+        padded.push('0');
+    }
+    padded.push_str(&upc);
+    return padded;
+}
+
 /// Check that a UPC-A code is valid by confirming that:
 /// * It is made of 12 digits
 /// * The check-digit is correct
@@ -91,6 +103,7 @@ pub fn fix_upca(upc: &str) -> String {
 #[cfg(test)]
 mod tests {
     use super::compute_upca_check_digit;
+    use super::zero_pad;
     use super::check_upca;
     use super::fix_upca;
 
@@ -101,6 +114,19 @@ mod tests {
         assert_eq!(compute_upca_check_digit(&"123456789081".as_bytes()), 1);
         assert_eq!(compute_upca_check_digit(&"036000291452".as_bytes()), 2);
         assert_eq!(compute_upca_check_digit(&"999999999993".as_bytes()), 3);
+    }
+
+
+    #[test]
+    fn zero_pad_static_data() {
+        assert_eq!(zero_pad("hello".to_string(), 6), "0hello".to_string());
+        assert_eq!(zero_pad("".to_string(), 0), "".to_string());
+    }
+
+    #[test]
+    fn zero_pad_string_longer_than_desired_length() {
+        assert_eq!(zero_pad("hello".to_string(), 3), "hello".to_string());
+        assert_eq!(zero_pad("hello".to_string(), 0), "hello".to_string());
     }
     
     #[test]
