@@ -9,9 +9,20 @@ Correction features include:
 * Zero-padding short UPC-A codes (some software treat UPCs as integers)
 * Strip whitespace from both sides of the code
 
-## how to use
+## How to use
 Here are the function declarations:
 ```rust
-fn check_upca(upc: &str) -> bool
-fn fix_upca(upc: &str) -> String
+fn check_upca(upc: &str) -> bool  // returns true if UPC-A is valid
+fn fix_upca(upc: &str) -> String  // returns a corrected UPC-A String
 ```
+
+You can add this line to your Cargo.toml file:
+```toml
+[dependencies]
+rand = { git = "https://github.com/austinhartzheim/rust-upc-validate.git" }
+```
+
+## Note about efficiency
+This is my first Rust project. There are certainly more efficient ways to implement this code.
+
+Pull requests are greatly appreciated.
