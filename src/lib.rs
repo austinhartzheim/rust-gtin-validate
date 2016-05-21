@@ -130,11 +130,11 @@ mod tests {
 
     #[test]
     fn compute_upca_check_digit_static_data() {
-        assert_eq!(compute_upca_check_digit(&"000000000000".as_bytes()), 0);
-        assert_eq!(compute_upca_check_digit(&"123456789012".as_bytes()), 2);
-        assert_eq!(compute_upca_check_digit(&"123456789081".as_bytes()), 1);
-        assert_eq!(compute_upca_check_digit(&"036000291452".as_bytes()), 2);
-        assert_eq!(compute_upca_check_digit(&"999999999993".as_bytes()), 3);
+        assert_eq!(compute_upca_check_digit("000000000000".as_bytes()), 0);
+        assert_eq!(compute_upca_check_digit("123456789012".as_bytes()), 2);
+        assert_eq!(compute_upca_check_digit("123456789081".as_bytes()), 1);
+        assert_eq!(compute_upca_check_digit("036000291452".as_bytes()), 2);
+        assert_eq!(compute_upca_check_digit("999999999993".as_bytes()), 3);
     }
 
 
@@ -157,45 +157,45 @@ mod tests {
 
     #[test]
     fn check_upca_invalid_length() {
-        assert!(check_upca(&"000") == false);
+        assert!(check_upca("000") == false);
     }
 
     #[test]
     fn check_upca_non_ascii() {
-        assert!(check_upca(&"❤") == false);
+        assert!(check_upca("❤") == false);
     }
 
     #[test]
     fn check_upca_invalid_check_digit() {
-        assert_eq!(check_upca(&"000000000001"), false);
-        assert_eq!(check_upca(&"000000000002"), false);
-        assert_eq!(check_upca(&"000000000003"), false);
-        assert_eq!(check_upca(&"000000000004"), false);
-        assert_eq!(check_upca(&"000000000005"), false);
-        assert_eq!(check_upca(&"000000000006"), false);
-        assert_eq!(check_upca(&"000000000007"), false);
-        assert_eq!(check_upca(&"000000000008"), false);
-        assert_eq!(check_upca(&"000000000009"), false);
+        assert_eq!(check_upca("000000000001"), false);
+        assert_eq!(check_upca("000000000002"), false);
+        assert_eq!(check_upca("000000000003"), false);
+        assert_eq!(check_upca("000000000004"), false);
+        assert_eq!(check_upca("000000000005"), false);
+        assert_eq!(check_upca("000000000006"), false);
+        assert_eq!(check_upca("000000000007"), false);
+        assert_eq!(check_upca("000000000008"), false);
+        assert_eq!(check_upca("000000000009"), false);
     }
 
     #[test]
     fn check_upca_static_data() {
-        assert_eq!(check_upca(&"000000000000"), true);
-        assert_eq!(check_upca(&"123456789012"), true);
-        assert_eq!(check_upca(&"123456789013"), false);
-        assert_eq!(check_upca(&"999999999993"), true);
-        assert_eq!(check_upca(&"999999999999"), false);
+        assert_eq!(check_upca("000000000000"), true);
+        assert_eq!(check_upca("123456789012"), true);
+        assert_eq!(check_upca("123456789013"), false);
+        assert_eq!(check_upca("999999999993"), true);
+        assert_eq!(check_upca("999999999999"), false);
     }
 
 
     #[test]
     #[should_panic]
     fn fix_upca_non_ascii() {
-        fix_upca(&"❤");
+        fix_upca("❤");
     }
 
     #[test]
     fn fix_upca_needs_zero_padding() {
-        assert_eq!(fix_upca(&"0"), "000000000000".to_string());
+        assert_eq!(fix_upca("0"), "000000000000".to_string());
     }
 }
