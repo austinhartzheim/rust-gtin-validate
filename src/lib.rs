@@ -31,6 +31,11 @@ fn compute_upca_check_digit(upc: &[u8]) -> u8 {
     return check;
 }
 
+/// Add zeros to the left side of a string so that it matches the
+/// desired length.
+///
+/// If the string is longer than the desired length, it is returned,
+/// without modification.
 fn zero_pad(upc: String, size: usize) -> String {
     if upc.len() >= size {
         return upc;
@@ -43,9 +48,17 @@ fn zero_pad(upc: String, size: usize) -> String {
     return padded;
 }
 
-/// Check that a UPC-A code is valid by confirming that:
-/// * It is made of 12 digits
-/// * The check-digit is correct
+/// Check that a UPC-A code is valid by confirming that it is made of
+/// exactly 12 digits and that the check-digit is correct.
+///
+/// # Examples
+/// ```
+/// use upc_validate::check_upca;
+///
+/// assert_eq!(check_upca("000000000000"), true);  // valid UPC
+/// assert_eq!(check_upca("00000000000"), false);  // invalid, UPC too short
+/// assert_eq!(check_upca("000000000001"), false); // invalid, wrong check digit
+/// ```
 pub fn check_upca(upc: &str) -> bool {
     let check: u8;
 
@@ -78,9 +91,24 @@ pub fn check_upca(upc: &str) -> bool {
     return true;
 }
 
-/// Attempt to fix invalid UPC codes by:
-/// * Stripping whitespace from the left and right sides
-/// * Zero-padding the UPC if it is less than 12 digits
+/// Attempt to fix invalid UPC codes by stripping whitespace from the
+/// left and right sides and zero-padding the UPC if it is less than 12
+/// digits in length.
+///
+/// These corrections fix many common errors introduced by manual data
+/// entry and software that treats UPCs as integers rather than strigns,
+/// thus truncating leading zeros.
+///
+/// # Examples
+/// ```
+/// use upc_validate::fix_upca;
+///
+/// // Add missing zero, fixing length:
+/// assert_eq!(fix_upca("87248795257"), "087248795257");
+///
+/// // Remove extra whitespace:
+/// assert_eq!(fix_upca("087248795257 "), "087248795257");
+/// ```
 pub fn fix_upca(upc: &str) -> String {
     let mut fixed = upc.trim_left().trim_right().to_string();
 
