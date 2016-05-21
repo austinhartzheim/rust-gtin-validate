@@ -34,7 +34,7 @@ fn compute_upca_check_digit(upc: &[u8]) -> u8 {
 /// Check that a UPC-A code is valid by confirming that:
 /// * It is made of 12 digits
 /// * The check-digit is correct
-fn check_upca(upc: &str) -> bool {
+pub fn check_upca(upc: &str) -> bool {
     let check: u8;
 
     // Check that input is ASCII with length 12
@@ -69,7 +69,7 @@ fn check_upca(upc: &str) -> bool {
 /// Attempt to fix invalid UPC codes by:
 /// * Stripping whitespace from the left and right sides
 /// * Zero-padding the UPC if it is less than 12 digits
-fn fix_upca(upc: &str) -> String {
+pub fn fix_upca(upc: &str) -> String {
     let mut fixed = upc.trim_left().trim_right().to_string();
 
     if upc.is_ascii() == false {
@@ -100,6 +100,7 @@ mod tests {
         assert_eq!(compute_upca_check_digit(&"123456789012".as_bytes()), 2);
         assert_eq!(compute_upca_check_digit(&"123456789081".as_bytes()), 1);
         assert_eq!(compute_upca_check_digit(&"036000291452".as_bytes()), 2);
+        assert_eq!(compute_upca_check_digit(&"999999999993".as_bytes()), 3);
     }
     
     #[test]
@@ -119,7 +120,6 @@ mod tests {
 
     #[test]
     fn check_upca_invalid_check_digit() {
-        assert_eq!(check_upca(&"000000000000"), true);
         assert_eq!(check_upca(&"000000000001"), false);
         assert_eq!(check_upca(&"000000000002"), false);
         assert_eq!(check_upca(&"000000000003"), false);
@@ -133,8 +133,11 @@ mod tests {
 
     #[test]
     fn check_upca_static_data() {
+        assert_eq!(check_upca(&"000000000000"), true);
         assert_eq!(check_upca(&"123456789012"), true);
         assert_eq!(check_upca(&"123456789013"), false);
+        assert_eq!(check_upca(&"999999999993"), true);
+        assert_eq!(check_upca(&"999999999999"), false);
     }
 
 
