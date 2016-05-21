@@ -12,8 +12,8 @@ Correction features include:
 ## How to use
 Here are the function declarations:
 ```rust
-fn check_upca(upc: &str) -> bool  // returns true if UPC-A is valid
-fn fix_upca(upc: &str) -> String  // returns a corrected UPC-A String
+fn check_upca(upc: &str) -> bool      // return true if UPC-A is valid
+pub fn fix_upca(upc: &str) -> String  // return a corrected UPC-A String
 ```
 
 You can add this line to your Cargo.toml file:
