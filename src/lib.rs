@@ -23,14 +23,11 @@ fn compute_upca_check_digit(upc: &[u8]) -> u8 {
         }
     }
 
-    println!("even: {}\todd: {}", even, odd);
-    
-    //    check = (10 - (((3*odd + even) as i16) % 10)) as u8;
+    // check = (10 - (((3*odd + even) as i16) % 10)) as u8;
     check = (3*odd + even) % 10;
     if check > 0 {
         check = 10 - check;
     }
-    println!("Check digit: {}", check);
     return check;
 }
 
