@@ -104,21 +104,38 @@ pub fn check_upca(upc: &str) -> bool {
 /// use upc_validate::fix_upca;
 ///
 /// // Add missing zero, fixing length:
-/// assert_eq!(fix_upca("87248795257"), "087248795257");
+/// let result1 = fix_upca("87248795257");
+/// assert!(result1.is_ok());
+/// assert_eq!(result1.unwrap(), "087248795257");
 ///
 /// // Remove extra whitespace:
-/// assert_eq!(fix_upca("087248795257 "), "087248795257");
+/// let result2 = fix_upca("087248795257 ");
+/// assert!(result2.is_ok());
+/// assert_eq!(result2.unwrap(), "087248795257");
 /// ```
-pub fn fix_upca(upc: &str) -> String {
+///
+/// It is also possible to detect errors:
+///
+/// ```
+/// use upc_validate::fix_upca;
+/// let result = fix_upca("123412341234123"); // UPC too long
+/// assert!(result.is_err());
+/// ```
+pub fn fix_upca(upc: &str) -> Result<String, &str> {
     let mut fixed = upc.trim_left().trim_right().to_string();
 
     if upc.is_ascii() == false {
-        panic!("Cannot operate on non-ASCII data");
+        return Err("Cannot operate on non-ASCII data");
     }
-    assert!(fixed.len() <= 12, "Cannot fix UPC-A. Length is longer than 12.");
+    if fixed.len() > 12 {
+        return Err("Cannot fix UPC-A. Length is longer than 12.");
+    }
     fixed = zero_pad(fixed, 12);
+    if !check_upca(&fixed) {
+        return Err("Final validation failed");
+    }
     
-    return fixed;
+    return Ok(fixed);
 }
 
 #[cfg(test)]
@@ -189,13 +206,13 @@ mod tests {
 
 
     #[test]
-    #[should_panic]
     fn fix_upca_non_ascii() {
-        fix_upca("❤");
+        assert!(fix_upca("❤").is_err());
     }
 
     #[test]
     fn fix_upca_needs_zero_padding() {
-        assert_eq!(fix_upca("0"), "000000000000".to_string());
+        assert!(fix_upca("0").is_ok());
+        assert_eq!(fix_upca("0").unwrap(), "000000000000");
     }
 }
