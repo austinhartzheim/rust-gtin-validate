@@ -1,4 +1,5 @@
 # upc_validate
+[![Build Status](https://travis-ci.org/austinhartzheim/rust-upc-validate.svg?branch=master)](https://travis-ci.org/austinhartzheim/rust-upc-validate)
 Validate and correct UPC-A codes in Rust.
 
 Validation features include:
