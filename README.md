@@ -18,7 +18,7 @@ Here are the function declarations:
 fn check_upca(upc: &str) -> bool
 
 // return a corrected UPC-A String or Err
-pub fn fix_upca(upc: &str) -> Result<String, &str>
+pub fn fix_upca(upc: &str) -> Result<String, UpcAFixError>
 ```
 
 You can add this line to your Cargo.toml file:
