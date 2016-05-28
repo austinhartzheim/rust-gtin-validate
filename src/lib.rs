@@ -5,6 +5,14 @@
 use std::ascii::AsciiExt;
 
 
+#[derive(Debug)]
+pub enum UpcAFixError {
+    NonAsciiString,
+    TooLong,
+    CheckDigitIncorrect
+}
+
+
 /// Computes the check digit of a UPC-A code.
 /// Assumes that all bytes in `upc` are valid ASCII digits.
 fn compute_upca_check_digit(upc: &[u8]) -> u8 {
@@ -121,18 +129,18 @@ pub fn check_upca(upc: &str) -> bool {
 /// let result = fix_upca("123412341234123"); // UPC too long
 /// assert!(result.is_err());
 /// ```
-pub fn fix_upca(upc: &str) -> Result<String, &str> {
+pub fn fix_upca(upc: &str) -> Result<String, UpcAFixError> {
     let mut fixed = upc.trim_left().trim_right().to_string();
 
     if upc.is_ascii() == false {
-        return Err("Cannot operate on non-ASCII data");
+        return Err(UpcAFixError::NonAsciiString);
     }
     if fixed.len() > 12 {
-        return Err("Cannot fix UPC-A. Length is longer than 12.");
+        return Err(UpcAFixError::TooLong);
     }
     fixed = zero_pad(fixed, 12);
     if !check_upca(&fixed) {
-        return Err("Final validation failed");
+        return Err(UpcAFixError::CheckDigitIncorrect);
     }
     
     return Ok(fixed);
