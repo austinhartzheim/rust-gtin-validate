@@ -24,10 +24,10 @@ pub fn fix_upca(upc: &str) -> Result<String, &str>
 You can add this line to your Cargo.toml file:
 ```toml
 [dependencies]
-rand = { git = "https://github.com/austinhartzheim/rust-upc-validate.git" }
+upc_validate = { git = "https://github.com/austinhartzheim/rust-upc-validate.git" }
 ```
 
-## Note about efficiency
-This is my first Rust project. There are certainly more efficient ways to implement this code.
+## Contributing
+Found a bug? Report an issue through GitHub.
 
-Pull requests are greatly appreciated.
+Want to hack on the code? Submit a pull request.
