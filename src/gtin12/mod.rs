@@ -56,7 +56,7 @@ pub fn check_upca(upc: &str) -> bool {
     let check: u8;
 
     // Check that input is ASCII with length 12
-    if upc.is_ascii() == false {
+    if !upc.is_ascii() {
         return false;
     }
     if upc.len() != 12 {
@@ -64,19 +64,13 @@ pub fn check_upca(upc: &str) -> bool {
     }
 
     let bytes = upc.as_bytes();
-    for i in 0 .. 12 {
-        // Checking that all bytes are ASCII digits
-        if bytes[i] < 48 || bytes[i] > 48 + 9 {
-            return false;
-        }
+    if !utils::is_number(bytes, 12) {
+        return false;
     }
     
     check = compute_upca_check_digit(bytes);
 
     // Calculate and compare check digit 
-    if bytes[11] < 48 || bytes[11] > 48 + 9 {
-        return false;
-    }
     if check != bytes[11] - 48 {
         return false;
     }
@@ -159,6 +153,13 @@ mod tests {
     #[test]
     fn check_upca_non_ascii() {
         assert!(check_upca("❤") == false);
+    }
+
+    #[test]
+    fn check_upca_non_numeric() {
+        assert!(check_upca("a") == false);
+        assert!(check_upca("abcdabcdabcd") == false); // length 12
+        assert!(check_upca("00000000000a") == false); // invalid check digit
     }
 
     #[test]
