@@ -18,17 +18,18 @@ Correction features include:
 ## How to use
 Here are the function declarations:
 ```rust
-// return true if UPC-A is valid
-fn check_upca(upc: &str) -> bool
+// return true if the GTIN-12 code is valid
+fn gtin12::check(upc: &str) -> bool
 
-// return a corrected UPC-A String or Err
-pub fn fix_upca(upc: &str) -> Result<String, UpcAFixError>
+// return a corrected GTIN-12 String or Err
+pub fn gtin12::fix(upc: &str) -> Result<String, UpcAFixError>
 ```
 
 For example, you can validate UPC-A codes:
 ```rust
 use gtin_validate::gtin12;
-assert_eq!(gtin12::check_upca("000000000000"), true);
+assert_eq!(gtin12::check("000000000000"), true);
+assert_eq!(gtin12::check("000000000001"), false);
 ```
 
 You can add this line to your Cargo.toml file:
