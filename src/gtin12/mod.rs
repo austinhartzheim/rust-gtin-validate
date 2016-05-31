@@ -14,33 +14,6 @@ pub enum UpcAFixError {
 }
 
 
-/// Computes the check digit of a UPC-A code.
-/// Assumes that all bytes in `upc` are valid ASCII digits.
-fn compute_upca_check_digit(upc: &[u8]) -> u8 {
-    let mut even: u8 = 0;
-    let mut odd: u8 = 0;
-    let mut check: u8;
-    let mut curr: u8;
-    
-    for i in 0..11 {
-        curr = upc[i] - 48;
-        
-        if i % 2 == 0 {
-            odd += curr;
-        } else {
-            even += curr;
-        }
-    }
-
-    // check = (10 - (((3*odd + even) as i16) % 10)) as u8;
-    check = (3*odd + even) % 10;
-    if check > 0 {
-        check = 10 - check;
-    }
-    return check;
-}
-
-
 /// Check that a UPC-A code is valid by confirming that it is made of
 /// exactly 12 digits and that the check-digit is correct.
 ///
@@ -48,13 +21,11 @@ fn compute_upca_check_digit(upc: &[u8]) -> u8 {
 /// ```
 /// use gtin_validate::gtin12;
 ///
-/// assert_eq!(gtin12::check("000000000000"), true);  // valid UPC
-/// assert_eq!(gtin12::check("00000000000"), false);  // invalid, UPC too short
-/// assert_eq!(gtin12::check("000000000001"), false); // invalid, wrong check digit
+/// assert_eq!(gtin12::check("000000000000"), true);  // Valid GTIN-12
+/// assert_eq!(gtin12::check("00000000000"), false);  // Too short
+/// assert_eq!(gtin12::check("000000000001"), false); // Bad check digit
 /// ```
 pub fn check(upc: &str) -> bool {
-    let check: u8;
-
     // Check that input is ASCII with length 12
     if !upc.is_ascii() {
         return false;
@@ -68,7 +39,7 @@ pub fn check(upc: &str) -> bool {
         return false;
     }
     
-    check = compute_upca_check_digit(bytes);
+    let check = utils::compute_check_digit(bytes, 12);
 
     // Calculate and compare check digit 
     if check != bytes[11] - 48 {
@@ -127,18 +98,8 @@ pub fn fix(upc: &str) -> Result<String, UpcAFixError> {
 
 #[cfg(test)]
 mod tests {
-    use super::compute_upca_check_digit;
     use super::check;
     use super::fix;
-
-    #[test]
-    fn compute_upca_check_digit_static_data() {
-        assert_eq!(compute_upca_check_digit("000000000000".as_bytes()), 0);
-        assert_eq!(compute_upca_check_digit("123456789012".as_bytes()), 2);
-        assert_eq!(compute_upca_check_digit("123456789081".as_bytes()), 1);
-        assert_eq!(compute_upca_check_digit("036000291452".as_bytes()), 2);
-        assert_eq!(compute_upca_check_digit("999999999993".as_bytes()), 3);
-    }
     
     #[test]
     fn check_valid() {
