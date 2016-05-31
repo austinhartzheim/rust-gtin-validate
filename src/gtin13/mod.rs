@@ -69,7 +69,7 @@ pub fn check(upc: &str) -> bool {
 /// ```
 /// # use gtin_validate::gtin13;
 /// match gtin13::fix("04567432178913") {
-///   Ok(upc) => {println!("{} is OK!", upc);}
+///   Ok(fixed) => {println!("{} is OK!", fixed);}
 ///   Err(_) => {println!("UPC is invalid");}
 /// }
 /// ```
