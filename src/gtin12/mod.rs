@@ -103,24 +103,24 @@ mod tests {
     
     #[test]
     fn check_valid() {
-        assert!(check(&"000000000000") == true);
+        assert_eq!(check(&"000000000000"), true);
     }
 
     #[test]
     fn check_invalid_length() {
-        assert!(check("000") == false);
+        assert_eq!(check("000"), false);
     }
 
     #[test]
     fn check_non_ascii() {
-        assert!(check("❤") == false);
+        assert_eq!(check("❤"), false);
     }
 
     #[test]
     fn check_non_numeric() {
-        assert!(check("a") == false);
-        assert!(check("abcdabcdabcd") == false); // length 12
-        assert!(check("00000000000a") == false); // invalid check digit
+        assert_eq!(check("a"), false);
+        assert_eq!(check("abcdabcdabcd"), false); // length 12
+        assert_eq!(check("00000000000a"), false); // invalid check digit
     }
 
     #[test]
