@@ -20,25 +20,20 @@ pub enum FixError {
 /// assert_eq!(gtin13::check("1498279802124"), false); // Bad check digit
 /// ```
 pub fn check(upc: &str) -> bool {
-    // Chech that input is ASCII with length 13
     if upc.is_ascii() == false {
         return false;
     }
     if upc.len() != 13 {
         return false;
     }
-    println!("pass 1");
 
     let bytes = upc.as_bytes();
     if !utils::is_number(bytes, 13) {
         return false;
     }
 
-    println!("pass 2");
-
+    // Calculate and compare check digit
     let check = utils::compute_check_digit(bytes, 13);
-
-    // Compare check digit
     if check != bytes[12] - 48 {
         return false;
     }
@@ -68,7 +63,9 @@ pub fn check(upc: &str) -> bool {
 /// assert!(result2.is_ok());
 /// assert_eq!(result2.unwrap(), "4823011492925");
 /// ```
+///
 /// Here is how you catch errors:
+///
 /// ```
 /// match gtin13::fix("04567432178913") {
 ///   Ok(upc) => {println!("{} is OK!", upc);}
