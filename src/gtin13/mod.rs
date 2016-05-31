@@ -67,6 +67,7 @@ pub fn check(upc: &str) -> bool {
 /// Here is how you catch errors:
 ///
 /// ```
+/// # use gtin_validate::gtin13;
 /// match gtin13::fix("04567432178913") {
 ///   Ok(upc) => {println!("{} is OK!", upc);}
 ///   Err(_) => {println!("UPC is invalid");}
