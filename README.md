@@ -7,6 +7,7 @@ Validate and correct GTIN codes, such as UPC-A and EAN-13, in Rust.
 Currenly supported types:
 * GTIN-12 (UPC-A)
 * GTIN-13 (EAN-13)
+* GTIN-14
 
 Validation features include:
 * Check that the string contains the correct number of digits
@@ -19,15 +20,15 @@ Correction features include:
 ## How to use
 Here are the function declarations:
 ```rust
-// return true if the GTIN-12 code is valid
+// return true if the code is valid, false otherwise
 fn gtin12::check(code: &str) -> bool
 fn gtin13::check(code: &str) -> bool
 fn gtin14::check(code: &str) -> bool
 
-// return a corrected GTIN-12 String or Err
-fn gtin12::fix(code: &str) -> Result<String, UpcAFixError>
-fn gtin13::fix(code: &str) -> Result<String, UpcAFixError>
-fn gtin14::fix(code: &str) -> Result<String, UpcAFixError>
+// return a corrected String or Err
+fn gtin12::fix(code: &str) -> Result<String, FixError>
+fn gtin13::fix(code: &str) -> Result<String, FixError>
+fn gtin14::fix(code: &str) -> Result<String, FixError>
 ```
 
 For example, you can validate UPC-A codes:

@@ -7,7 +7,7 @@ use utils;
 
 
 #[derive(Debug)]
-pub enum UpcAFixError {
+pub enum FixError {
     NonAsciiString,
     TooLong,
     CheckDigitIncorrect
@@ -79,18 +79,18 @@ pub fn check(code: &str) -> bool {
 /// let result = gtin12::fix("123412341234123"); // UPC too long
 /// assert!(result.is_err());
 /// ```
-pub fn fix(code: &str) -> Result<String, UpcAFixError> {
+pub fn fix(code: &str) -> Result<String, FixError> {
     let mut fixed = code.trim_left().trim_right().to_string();
 
     if fixed.is_ascii() == false {
-        return Err(UpcAFixError::NonAsciiString);
+        return Err(FixError::NonAsciiString);
     }
     if fixed.len() > 12 {
-        return Err(UpcAFixError::TooLong);
+        return Err(FixError::TooLong);
     }
     fixed = utils::zero_pad(fixed, 12);
     if !check(&fixed) {
-        return Err(UpcAFixError::CheckDigitIncorrect);
+        return Err(FixError::CheckDigitIncorrect);
     }
     
     return Ok(fixed);
