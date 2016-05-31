@@ -47,18 +47,26 @@ pub fn check(upc: &str) -> bool {
 }
 
 pub fn fix(upc: &str) -> Result<String, FixError> {
+    let mut fixed = upc.trim_left().trim_right().to_string();
+    
     if !upc.is_ascii() {
         return Err(FixError::NonAsciiString);
     }
     if upc.len() > 13 {
         return Err(FixError::TooLong);
     }
-    panic!("Not implemented!");
+    fixed = utils::zero_pad(fixed, 13);
+    if !check(&fixed) {
+        return Err(FixError::CheckDigitIncorrect);
+    }
+
+    return Ok(fixed);
 }
 
 #[cfg(test)]
 mod tests {
     use super::check;
+    use super::fix;
 
     #[test]
     fn check_valid() {
@@ -107,5 +115,17 @@ mod tests {
         assert_eq!(check("0999999999999"), false);
         assert_eq!(check("4459121265748"), true);
         assert_eq!(check("4459121265747"), false);
+    }
+
+    #[test]
+    fn fix_non_ascii() {
+        assert!(fix("❤").is_err());
+    }
+
+    #[test]
+    fn fix_needs_zero_padding() {
+        assert!(fix("0").is_ok());
+        assert_eq!(fix("0").unwrap(), "0000000000000");
+        assert_eq!(fix("123012301238").unwrap(), "0123012301238");
     }
 }
