@@ -25,16 +25,16 @@ pub enum UpcAFixError {
 /// assert_eq!(gtin12::check("00000000000"), false);  // Too short
 /// assert_eq!(gtin12::check("000000000001"), false); // Bad check digit
 /// ```
-pub fn check(upc: &str) -> bool {
+pub fn check(code: &str) -> bool {
     // Check that input is ASCII with length 12
-    if !upc.is_ascii() {
+    if !code.is_ascii() {
         return false;
     }
-    if upc.len() != 12 {
+    if code.len() != 12 {
         return false;
     }
 
-    let bytes = upc.as_bytes();
+    let bytes = code.as_bytes();
     if !utils::is_number(bytes, 12) {
         return false;
     }
@@ -79,8 +79,8 @@ pub fn check(upc: &str) -> bool {
 /// let result = gtin12::fix("123412341234123"); // UPC too long
 /// assert!(result.is_err());
 /// ```
-pub fn fix(upc: &str) -> Result<String, UpcAFixError> {
-    let mut fixed = upc.trim_left().trim_right().to_string();
+pub fn fix(code: &str) -> Result<String, UpcAFixError> {
+    let mut fixed = code.trim_left().trim_right().to_string();
 
     if fixed.is_ascii() == false {
         return Err(UpcAFixError::NonAsciiString);

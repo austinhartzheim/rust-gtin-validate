@@ -19,15 +19,15 @@ pub enum FixError {
 /// assert_eq!(gtin14::check("1456781598346"), false);  // too short
 /// assert_eq!(gtin14::check("14567815983468"), false); // Bad check digit
 /// ```
-pub fn check(upc: &str) -> bool {
-    if upc.is_ascii() == false {
+pub fn check(code: &str) -> bool {
+    if code.is_ascii() == false {
         return false;
     }
-    if upc.len() != 14 {
+    if code.len() != 14 {
         return false;
     }
 
-    let bytes = upc.as_bytes();
+    let bytes = code.as_bytes();
     if !utils::is_number(bytes, 14) {
         return false;
     }

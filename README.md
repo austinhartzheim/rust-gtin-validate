@@ -20,13 +20,13 @@ Correction features include:
 Here are the function declarations:
 ```rust
 // return true if the GTIN-12 code is valid
-fn gtin12::check(upc: &str) -> bool
-fn gtin13::check(upc: &str) -> bool
-fn gtin14::check(upc: &str) -> bool
+fn gtin12::check(code: &str) -> bool
+fn gtin13::check(code: &str) -> bool
+fn gtin14::check(code: &str) -> bool
 
 // return a corrected GTIN-12 String or Err
-fn gtin12::fix(upc: &str) -> Result<String, UpcAFixError>
-fn gtin13::fix(upc: &str) -> Result<String, UpcAFixError>
+fn gtin12::fix(code: &str) -> Result<String, UpcAFixError>
+fn gtin13::fix(code: &str) -> Result<String, UpcAFixError>
 fn gtin14::fix(code: &str) -> Result<String, UpcAFixError>
 ```
 

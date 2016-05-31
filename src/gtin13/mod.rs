@@ -19,15 +19,15 @@ pub enum FixError {
 /// assert_eq!(gtin13::check("468712378699"), false);  // Too short
 /// assert_eq!(gtin13::check("1498279802124"), false); // Bad check digit
 /// ```
-pub fn check(upc: &str) -> bool {
-    if upc.is_ascii() == false {
+pub fn check(code: &str) -> bool {
+    if code.is_ascii() == false {
         return false;
     }
-    if upc.len() != 13 {
+    if code.len() != 13 {
         return false;
     }
 
-    let bytes = upc.as_bytes();
+    let bytes = code.as_bytes();
     if !utils::is_number(bytes, 13) {
         return false;
     }
@@ -74,8 +74,8 @@ pub fn check(upc: &str) -> bool {
 /// }
 /// ```
 
-pub fn fix(upc: &str) -> Result<String, FixError> {
-    let mut fixed = upc.trim_left().trim_right().to_string();
+pub fn fix(code: &str) -> Result<String, FixError> {
+    let mut fixed = code.trim_left().trim_right().to_string();
     
     if !fixed.is_ascii() {
         return Err(FixError::NonAsciiString);
