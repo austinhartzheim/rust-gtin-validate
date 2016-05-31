@@ -46,13 +46,43 @@ pub fn check(upc: &str) -> bool {
     return true;
 }
 
+/// Attempt to fix an invalid GTIN-13 code by stripping whitespace from
+/// the let and right sides and zero-padding the code if it is less than
+/// 13 digits in length.
+///
+/// These corrections fix many common errors introduced by manual data
+/// entry and software that treats GTINs as integers rather than strings,
+/// thus truncating the leading zeros.
+///
+/// # Examples
+/// ```
+/// use gtin_validate::gtin13;
+///
+/// // Add missing zero, fixing length
+/// let result1 = gtin13::fix("495205944325");
+/// assert!(result1.is_ok());
+/// assert_eq!(result1.unwrap(), "0495205944325");
+///
+/// // Remove extra whitespace
+/// let result2 = gtin13::fix("4823011492925 ");
+/// assert!(result2.is_ok());
+/// assert_eq!(result2.unwrap(), "4823011492925");
+/// ```
+/// Here is how you catch errors:
+/// ```
+/// match gtin13::fix("04567432178913") {
+///   Ok(upc) => {println!("{} is OK!", upc);}
+///   Err(_) => {println!("UPC is invalid");}
+/// }
+/// ```
+
 pub fn fix(upc: &str) -> Result<String, FixError> {
     let mut fixed = upc.trim_left().trim_right().to_string();
     
-    if !upc.is_ascii() {
+    if !fixed.is_ascii() {
         return Err(FixError::NonAsciiString);
     }
-    if upc.len() > 13 {
+    if fixed.len() > 13 {
         return Err(FixError::TooLong);
     }
     fixed = utils::zero_pad(fixed, 13);

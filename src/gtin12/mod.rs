@@ -54,7 +54,7 @@ pub fn check(upc: &str) -> bool {
 /// digits in length.
 ///
 /// These corrections fix many common errors introduced by manual data
-/// entry and software that treats UPCs as integers rather than strigns,
+/// entry and software that treats UPCs as integers rather than strings,
 /// thus truncating leading zeros.
 ///
 /// # Examples
@@ -82,7 +82,7 @@ pub fn check(upc: &str) -> bool {
 pub fn fix(upc: &str) -> Result<String, UpcAFixError> {
     let mut fixed = upc.trim_left().trim_right().to_string();
 
-    if upc.is_ascii() == false {
+    if fixed.is_ascii() == false {
         return Err(UpcAFixError::NonAsciiString);
     }
     if fixed.len() > 12 {
