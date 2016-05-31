@@ -1,18 +1,19 @@
 # Rust GTIN Validator
-[![Build Status](https://travis-ci.org/austinhartzheim/rust-upc-validate.svg?branch=master)](https://travis-ci.org/austinhartzheim/rust-upc-validate)
+[![Build Status](https://travis-ci.org/austinhartzheim/rust-gtin-validate.svg?branch=master)](https://travis-ci.org/austinhartzheim/rust-gtin-validate)
 
-Validate and correct GTIN codes, such as UPC-A and EAN13, in Rust.
+Validate and correct GTIN codes, such as UPC-A and EAN-13, in Rust.
 
 ## Features
 Currenly supported types:
-* UPC-A (GTIN-12)
+* GTIN-12 (UPC-A)
+* GTIN-13 (EAN-13)
 
 Validation features include:
-* Checking UPC-A code length (should be 12 digits)
-* Computing the check-digit and confirming match
+* Check that the string contains the correct number of digits
+* Compute the check-digit and confirming that it matches
 
 Correction features include:
-* Zero-padding short UPC-A codes (some software treat UPCs as integers)
+* Add zero-padding (some software treat these codes as integers)
 * Strip whitespace from both sides of the code
 
 ## How to use
@@ -20,9 +21,11 @@ Here are the function declarations:
 ```rust
 // return true if the GTIN-12 code is valid
 fn gtin12::check(upc: &str) -> bool
+fn gtin13::check(upc: &str) -> bool
 
 // return a corrected GTIN-12 String or Err
-pub fn gtin12::fix(upc: &str) -> Result<String, UpcAFixError>
+fn gtin12::fix(upc: &str) -> Result<String, UpcAFixError>
+fn gtin13::fix(upc: &str) -> Result<String, UpcAFixError>
 ```
 
 For example, you can validate UPC-A codes:
