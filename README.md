@@ -18,7 +18,7 @@ Correction features include:
 * Strip whitespace from both sides of the code
 
 ## How to use
-For full details, check [https://github.com/austinhartzheim/rust-gtin-validate/](the documentation).
+For full details, check [the documentation](https://docs.austinhartzheim.me/rust/gtin_validate/).
 
 Briefly, Here are the function declarations:
 ```rust
