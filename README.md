@@ -18,7 +18,9 @@ Correction features include:
 * Strip whitespace from both sides of the code
 
 ## How to use
-Here are the function declarations:
+For full details, check [https://github.com/austinhartzheim/rust-gtin-validate/](the documentation).
+
+Briefly, Here are the function declarations:
 ```rust
 // return true if the code is valid, false otherwise
 fn gtin12::check(code: &str) -> bool
