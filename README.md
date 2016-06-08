@@ -20,7 +20,7 @@ Correction features include:
 ## How to use
 For full details, check [the documentation](https://docs.austinhartzheim.me/rust/gtin_validate/).
 
-Briefly, Here are the function declarations:
+Briefly, here are the function declarations:
 ```rust
 // return true if the code is valid, false otherwise
 fn gtin12::check(code: &str) -> bool
