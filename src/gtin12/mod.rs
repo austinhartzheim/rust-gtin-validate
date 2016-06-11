@@ -23,9 +23,9 @@ pub enum FixError {
 /// ```
 /// use gtin_validate::gtin12;
 ///
-/// assert_eq!(gtin12::check("000000000000"), true);  // Valid GTIN-12
-/// assert_eq!(gtin12::check("00000000000"), false);  // Too short
-/// assert_eq!(gtin12::check("000000000001"), false); // Bad check digit
+/// assert_eq!(gtin12::check("897854613315"), true);  // Valid GTIN-12
+/// assert_eq!(gtin12::check("89785461331"), false);  // Too short
+/// assert_eq!(gtin12::check("897854613318"), false); // Bad check digit
 /// ```
 pub fn check(code: &str) -> bool {
     // Check that input is ASCII with length 12
