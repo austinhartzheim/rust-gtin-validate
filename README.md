@@ -5,6 +5,7 @@ Validate and correct GTIN codes, such as UPC-A and EAN-13, in Rust.
 
 ## Features
 Currenly supported types:
+* GTIN-8
 * GTIN-12 (UPC-A)
 * GTIN-13 (EAN-13)
 * GTIN-14
@@ -45,7 +46,7 @@ assert_eq!(gtin12::check("000000000001"), false);
 You can add this line to your Cargo.toml file:
 ```toml
 [dependencies]
-gtin-validate = "0.5.0"
+gtin-validate = "1.0.0"
 ```
 
 ## Contributing
