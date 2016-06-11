@@ -8,8 +8,9 @@ keywords = ["upc", "ean", "gtin"]
 repository = "https://github.com/austinhartzheim/rust-gtin-validate/"
 documentation = "https://docs.austinhartzheim.me/rust/gtin_validate/"
 description = """
-Validate GTIN barcodes including UPC-A and EAN-13. This module has built-in
-support for GTIN-12 (UPC-A), GTIN-13 (EAN-13), and GTIN-14 codes.
+Validate GTIN barcodes including UPC-A and EAN-13.
+
+This module has built-in support for GTIN-8, GTIN-12 (UPC-A), GTIN-13 (EAN-13), and GTIN-14 codes.
 """
 include = [
     "**/*.rs",

@@ -1,6 +1,10 @@
+//! Performs validation and correction of GTIN-8 codes.
+
 use std::ascii::AsciiExt;
 use utils;
 
+
+/// Errors that make GTIN-8 correction impossible.
 #[derive(Debug)]
 pub enum FixError {
     NonAsciiString,

@@ -1,6 +1,9 @@
+//! Performs validation and correction of GTIN-14 codes.
 use std::ascii::AsciiExt;
 use utils;
 
+
+/// Errors that make GTIN-14 correction impossible.
 #[derive(Debug)]
 pub enum FixError {
     NonAsciiString,

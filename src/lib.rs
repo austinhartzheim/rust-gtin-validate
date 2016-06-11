@@ -7,14 +7,6 @@
 //! are sometimes treated as integers) and the removal of whitespace
 //! that can be accidentally introduced during data entry or spreadsheet
 //! conversion.
-//! 
-//! This crate supports the following code types:
-//! 
-//! * GTIN-8
-//! * GTIN-12 (UPC-A)
-//! * GTIN-13 (EAN-13)
-//! * GTIN-14
-
 
 
 // private modules for internal use

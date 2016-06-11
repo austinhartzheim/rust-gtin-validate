@@ -1,6 +1,10 @@
+//! Performs validation and correction of GTIN-13 and EAN-13 codes.
+
 use std::ascii::AsciiExt;
 use utils;
 
+
+/// Errors that make GTIN-13 correction impossible.
 #[derive(Debug)]
 pub enum FixError {
     NonAsciiString,

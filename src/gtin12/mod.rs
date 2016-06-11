@@ -1,11 +1,10 @@
-//! # gtin12
-//!
-//! Performs validation and correction of UPC strings.
+//! Performs validation and correction of GTIN-12 and UPC-A codes.
 
 use std::ascii::AsciiExt;
 use utils;
 
 
+/// Errors that make GTIN-12 correction impossible.
 #[derive(Debug)]
 pub enum FixError {
     NonAsciiString,
