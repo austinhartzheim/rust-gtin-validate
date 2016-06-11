@@ -6,8 +6,11 @@ use utils;
 /// Errors that make GTIN-14 correction impossible.
 #[derive(Debug)]
 pub enum FixError {
+    /// The provided string contains non-ASCII characters.
     NonAsciiString,
+    /// The provided code was too long to be valid.
     TooLong,
+    /// The calculated check-digit did not match the code's check-digit.
     CheckDigitIncorrect
 }
 
