@@ -27,7 +27,7 @@ pub enum FixError {
 /// assert_eq!(gtin8::check("14567811"), false); // Bad check digit
 /// ```
 pub fn check(code: &str) -> bool {
-    if code.is_ascii() == false {
+    if !code.is_ascii() {
         return false;
     }
     if code.len() != 8 {
@@ -45,7 +45,7 @@ pub fn check(code: &str) -> bool {
         return false;
     }
 
-    return true;
+    true
 }
 
 /// Attempt to fix an invalid GTIN-8 code by stripping whitespace from
@@ -94,7 +94,7 @@ pub fn fix(code: &str) -> Result<String, FixError> {
         return Err(FixError::CheckDigitIncorrect);
     }
 
-    return Ok(fixed);
+    Ok(fixed)
 }
 
 #[cfg(test)]

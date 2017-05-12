@@ -21,7 +21,8 @@ pub fn compute_check_digit(bytes: &[u8], size: usize) -> u8 {
     if check > 0 {
         check = 10 - check;
     }
-    return check;
+
+    check
 }
 
 /// Add zeros to the left side of a string so that it matches the
@@ -38,7 +39,8 @@ pub fn zero_pad(upc: String, size: usize) -> String {
         padded.push('0');
     }
     padded.push_str(&upc);
-    return padded;
+
+    padded
 }
 
 
@@ -51,7 +53,8 @@ pub fn is_number(bytes: &[u8], length: usize) -> bool {
             return false;
         }
     }
-    return true;
+
+    true
 }
 
 

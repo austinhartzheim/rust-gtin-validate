@@ -48,7 +48,7 @@ pub fn check(code: &str) -> bool {
         return false;
     }
 
-    return true;
+    true
 }
 
 /// Attempt to fix invalid UPC codes by stripping whitespace from the
@@ -84,7 +84,7 @@ pub fn check(code: &str) -> bool {
 pub fn fix(code: &str) -> Result<String, FixError> {
     let mut fixed = code.trim_left().trim_right().to_string();
 
-    if fixed.is_ascii() == false {
+    if !fixed.is_ascii() {
         return Err(FixError::NonAsciiString);
     }
     if fixed.len() > 12 {
@@ -95,7 +95,7 @@ pub fn fix(code: &str) -> Result<String, FixError> {
         return Err(FixError::CheckDigitIncorrect);
     }
 
-    return Ok(fixed);
+    Ok(fixed)
 }
 
 #[cfg(test)]
