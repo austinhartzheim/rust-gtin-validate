@@ -48,8 +48,11 @@ pub fn zero_pad(upc: String, size: usize) -> String {
 /// function will not accept other number-related characters such as
 /// a decimal or negative sign as those are invalid in GTINs.
 pub fn is_number(bytes: &[u8], length: usize) -> bool {
-    for i in 0..length {
-        if bytes[i] < 48 || bytes[i] > 48 + 9 {
+    const ASCII_DIGIT_MIN: u8 = 48;
+    const ASCII_DIGIT_MAX: u8 = 48 + 9;
+
+    for byte in bytes.iter().take(length) {
+        if byte < &ASCII_DIGIT_MIN || byte > &ASCII_DIGIT_MAX {
             return false;
         }
     }
