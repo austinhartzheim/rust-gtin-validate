@@ -12,7 +12,7 @@ pub enum FixError {
     /// The provided code was too long to be valid.
     TooLong,
     /// The calculated check-digit did not match the code's check-digit.
-    CheckDigitIncorrect
+    CheckDigitIncorrect,
 }
 
 /// Check that a GTIN-8 code is valid by confirming that it is exactly

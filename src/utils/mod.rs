@@ -8,7 +8,7 @@ pub fn compute_check_digit(bytes: &[u8], size: usize) -> u8 {
 
     // Read GTIN in reverse because the even/odd columns are defined
     // right-to-left, with the last non-check-digit column being odd.
-    for i in 2 .. size + 1 {
+    for i in 2..size + 1 {
         curr = bytes[size - i] - 48;
         if i % 2 == 0 {
             odd += curr as u16;
@@ -17,7 +17,7 @@ pub fn compute_check_digit(bytes: &[u8], size: usize) -> u8 {
         }
     }
 
-    check = ((3*odd + even) % 10) as u8;
+    check = ((3 * odd + even) % 10) as u8;
     if check > 0 {
         check = 10 - check;
     }
@@ -34,7 +34,7 @@ pub fn zero_pad(upc: String, size: usize) -> String {
         return upc;
     }
     let mut padded = String::with_capacity(size);
-    for _ in 0 .. size - upc.len() {
+    for _ in 0..size - upc.len() {
         padded.push('0');
     }
     padded.push_str(&upc);
@@ -46,7 +46,7 @@ pub fn zero_pad(upc: String, size: usize) -> String {
 /// function will not accept other number-related characters such as
 /// a decimal or negative sign as those are invalid in GTINs.
 pub fn is_number(bytes: &[u8], length: usize) -> bool {
-    for i in 0 .. length {
+    for i in 0..length {
         if bytes[i] < 48 || bytes[i] > 48 + 9 {
             return false;
         }

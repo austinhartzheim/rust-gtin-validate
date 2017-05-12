@@ -12,7 +12,7 @@ pub enum FixError {
     /// The provided code was too long to be valid.
     TooLong,
     /// The calculated check-digit did not match the code's check-digit.
-    CheckDigitIncorrect
+    CheckDigitIncorrect,
 }
 
 /// Check that a GTIN-13 code is valid by checking the length (should be
@@ -83,7 +83,7 @@ pub fn check(code: &str) -> bool {
 
 pub fn fix(code: &str) -> Result<String, FixError> {
     let mut fixed = code.trim_left().trim_right().to_string();
-    
+
     if !fixed.is_ascii() {
         return Err(FixError::NonAsciiString);
     }

@@ -1,6 +1,6 @@
 //! Validate GTIN-style barcodes, including the commonly-used UPC-A and
 //! EAN-13 codes.
-//! 
+//!
 //! In addition to validating the correctness of the codes, you can
 //! attempt to automatically repair the most common errors, such as the
 //! removal of leading zeroes by spreadsheet software (because the codes

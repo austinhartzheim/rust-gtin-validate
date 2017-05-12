@@ -12,7 +12,7 @@ pub enum FixError {
     /// The provided code was too long to be valid.
     TooLong,
     /// The calculated check-digit did not match the code's check-digit.
-    CheckDigitIncorrect
+    CheckDigitIncorrect,
 }
 
 
@@ -40,14 +40,14 @@ pub fn check(code: &str) -> bool {
     if !utils::is_number(bytes, 12) {
         return false;
     }
-    
+
     let check = utils::compute_check_digit(bytes, 12);
 
-    // Calculate and compare check digit 
+    // Calculate and compare check digit
     if check != bytes[11] - 48 {
         return false;
     }
-    
+
     return true;
 }
 
@@ -94,7 +94,7 @@ pub fn fix(code: &str) -> Result<String, FixError> {
     if !check(&fixed) {
         return Err(FixError::CheckDigitIncorrect);
     }
-    
+
     return Ok(fixed);
 }
 
@@ -102,7 +102,7 @@ pub fn fix(code: &str) -> Result<String, FixError> {
 mod tests {
     use super::check;
     use super::fix;
-    
+
     #[test]
     fn check_valid() {
         assert_eq!(check(&"000000000000"), true);
