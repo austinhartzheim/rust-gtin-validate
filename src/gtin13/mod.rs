@@ -35,7 +35,7 @@ pub fn check(code: &str) -> bool {
     }
 
     let bytes = code.as_bytes();
-    if !utils::is_number(bytes, 13) {
+    if !utils::is_number(bytes) {
         return false;
     }
 
