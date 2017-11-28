@@ -41,7 +41,7 @@ pub fn check(code: &str) -> bool {
         return false;
     }
 
-    let check = utils::compute_check_digit(bytes, 12);
+    let check = utils::compute_check_digit(bytes);
 
     // Calculate and compare check digit
     if check != bytes[11] - 48 {
