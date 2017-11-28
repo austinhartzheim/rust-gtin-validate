@@ -1,5 +1,6 @@
 # Rust GTIN Validator
 [![Build Status](https://travis-ci.org/austinhartzheim/rust-gtin-validate.svg?branch=master)](https://travis-ci.org/austinhartzheim/rust-gtin-validate)
+[![Coverage Status](https://coveralls.io/repos/github/austinhartzheim/rust-gtin-validate/badge.svg)](https://coveralls.io/github/austinhartzheim/rust-gtin-validate)
 
 Validate and correct GTIN codes, such as UPC-A and EAN-13, in Rust.
 
