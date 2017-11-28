@@ -22,7 +22,7 @@ pub enum FixError {
 /// ```
 /// use gtin_validate::gtin8;
 ///
-/// assert_eq!(gtin8::check("14567810"), true);  // Valid GTIN-14
+/// assert_eq!(gtin8::check("14567810"), true);  // Valid GTIN-8
 /// assert_eq!(gtin8::check("1456781"), false);  // too short
 /// assert_eq!(gtin8::check("14567811"), false); // Bad check digit
 /// ```
@@ -113,6 +113,38 @@ mod tests {
     fn check_invalid_length() {
         assert_eq!(check("0000000"), false); // too short
         assert_eq!(check("734289412"), false); // too long
+    }
+
+    #[test]
+    fn check_non_ascii() {
+        assert_eq!(check("❤"), false);
+    }
+
+    #[test]
+    fn check_non_numeric() {
+        assert_eq!(check("a"), false);
+        assert_eq!(check("abcdabcd"), false); // length 8
+        assert_eq!(check("0000000a"), false); // invalid check digit
+    }
+
+    #[test]
+    fn check_invalid_check_digit() {
+        assert_eq!(check("00000001"), false);
+        assert_eq!(check("00000002"), false);
+        assert_eq!(check("00000003"), false);
+        assert_eq!(check("00000004"), false);
+        assert_eq!(check("00000005"), false);
+        assert_eq!(check("00000006"), false);
+        assert_eq!(check("00000007"), false);
+        assert_eq!(check("00000008"), false);
+        assert_eq!(check("00000009"), false);
+    }
+
+    #[test]
+    fn check_static_data() {
+        assert_eq!(check("14567810"), true);  // Valid GTIN-8
+        assert_eq!(check("1456781"), false);  // too short
+        assert_eq!(check("14567811"), false); // Bad check digit
     }
 
     #[test]

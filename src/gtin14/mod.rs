@@ -115,6 +115,38 @@ mod tests {
     }
 
     #[test]
+    fn check_non_ascii() {
+        assert_eq!(check("❤"), false);
+    }
+
+    #[test]
+    fn check_non_numeric() {
+        assert_eq!(check("a"), false);
+        assert_eq!(check("abcdabcdabcdab"), false); // length 14
+        assert_eq!(check("0000000000000a"), false); // invalid check digit
+    }
+
+    #[test]
+    fn check_invalid_check_digit() {
+        assert_eq!(check("00000000000001"), false);
+        assert_eq!(check("00000000000002"), false);
+        assert_eq!(check("00000000000003"), false);
+        assert_eq!(check("00000000000004"), false);
+        assert_eq!(check("00000000000005"), false);
+        assert_eq!(check("00000000000006"), false);
+        assert_eq!(check("00000000000007"), false);
+        assert_eq!(check("00000000000008"), false);
+        assert_eq!(check("00000000000009"), false);
+    }
+
+    #[test]
+    fn check_static_data() {
+        assert_eq!(check("14567815983469"), true);  // Valid GTIN-14
+        assert_eq!(check("1456781598346"), false);  // too short
+        assert_eq!(check("14567815983468"), false); // Bad check digit
+    }
+
+    #[test]
     fn fix_non_ascii() {
         assert!(fix("❤").is_err());
     }

@@ -147,7 +147,6 @@ mod tests {
         assert_eq!(check("999999999999"), false);
     }
 
-
     #[test]
     fn fix_non_ascii() {
         assert!(fix("❤").is_err());
