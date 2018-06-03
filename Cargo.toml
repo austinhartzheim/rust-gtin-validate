@@ -20,3 +20,6 @@ include = [
 ]
 
 [dependencies]
+
+[badges]
+travis-ci = { repository = "austinhartzheim/rust-gtin-validate" }
