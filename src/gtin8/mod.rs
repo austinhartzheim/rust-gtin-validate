@@ -140,8 +140,8 @@ mod tests {
 
     #[test]
     fn check_static_data() {
-        assert_eq!(check("14567810"), true);  // Valid GTIN-8
-        assert_eq!(check("1456781"), false);  // too short
+        assert_eq!(check("14567810"), true); // Valid GTIN-8
+        assert_eq!(check("1456781"), false); // too short
         assert_eq!(check("14567811"), false); // Bad check digit
     }
 

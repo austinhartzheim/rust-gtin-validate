@@ -13,7 +13,6 @@ pub enum FixError {
     CheckDigitIncorrect,
 }
 
-
 /// Check that a UPC-A code is valid by confirming that it is made of
 /// exactly 12 digits and that the check-digit is correct.
 ///

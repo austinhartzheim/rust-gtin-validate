@@ -43,7 +43,6 @@ pub fn zero_pad(upc: String, size: usize) -> String {
     padded
 }
 
-
 /// Check that the string is made entirely of ASCII digits. This
 /// function will not accept other number-related characters such as
 /// a decimal or negative sign as those are invalid in GTINs.
@@ -60,12 +59,11 @@ pub fn is_number(bytes: &[u8], length: usize) -> bool {
     true
 }
 
-
 #[cfg(test)]
 mod tests {
     use super::compute_check_digit;
-    use super::zero_pad;
     use super::is_number;
+    use super::zero_pad;
 
     #[test]
     fn compute_check_digit_static_data() {
