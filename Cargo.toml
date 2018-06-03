@@ -21,5 +21,24 @@ include = [
 
 [dependencies]
 
+[dev-dependencies]
+criterion = "0.2"
+
+[[bench]]
+name = "gtin8"
+harness = false
+
+[[bench]]
+name = "gtin12"
+harness = false
+
+[[bench]]
+name = "gtin13"
+harness = false
+
+[[bench]]
+name = "gtin14"
+harness = false
+
 [badges]
 travis-ci = { repository = "austinhartzheim/rust-gtin-validate" }
