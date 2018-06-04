@@ -25,10 +25,10 @@ pub enum FixError {
 /// assert_eq!(gtin12::check("897854613318"), false); // Bad check digit
 /// ```
 pub fn check(code: &str) -> bool {
-    if !utils::is_ascii_numeric(code) {
+    if code.len() != 12 {
         return false;
     }
-    if code.len() != 12 {
+    if !utils::is_ascii_numeric(code) {
         return false;
     }
 
