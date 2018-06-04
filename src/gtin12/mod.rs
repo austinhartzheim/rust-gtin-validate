@@ -25,22 +25,16 @@ pub enum FixError {
 /// assert_eq!(gtin12::check("897854613318"), false); // Bad check digit
 /// ```
 pub fn check(code: &str) -> bool {
-    // Check that input is ASCII with length 12
-    if !code.is_ascii() {
+    if !utils::is_ascii_numeric(code) {
         return false;
     }
     if code.len() != 12 {
         return false;
     }
 
-    let bytes = code.as_bytes();
-    if !utils::is_number(bytes, 12) {
-        return false;
-    }
-
-    let check = utils::compute_check_digit(bytes, 12);
-
     // Calculate and compare check digit
+    let bytes = code.as_bytes();
+    let check = utils::compute_check_digit(bytes, 12);
     if check != bytes[11] - 48 {
         return false;
     }

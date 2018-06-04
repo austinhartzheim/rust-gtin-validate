@@ -25,19 +25,15 @@ pub enum FixError {
 /// assert_eq!(gtin8::check("14567811"), false); // Bad check digit
 /// ```
 pub fn check(code: &str) -> bool {
-    if !code.is_ascii() {
+    if !utils::is_ascii_numeric(code) {
         return false;
     }
     if code.len() != 8 {
         return false;
     }
 
-    let bytes = code.as_bytes();
-    if !utils::is_number(bytes, 8) {
-        return false;
-    }
-
     // Calculate and compare check digit
+    let bytes = code.as_bytes();
     let check = utils::compute_check_digit(bytes, 8);
     if check != bytes[7] - 48 {
         return false;

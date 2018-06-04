@@ -43,26 +43,14 @@ pub fn zero_pad(upc: String, size: usize) -> String {
     padded
 }
 
-/// Check that the string is made entirely of ASCII digits. This
-/// function will not accept other number-related characters such as
-/// a decimal or negative sign as those are invalid in GTINs.
-pub fn is_number(bytes: &[u8], length: usize) -> bool {
-    const ASCII_DIGIT_MIN: u8 = 48;
-    const ASCII_DIGIT_MAX: u8 = 48 + 9;
-
-    for byte in bytes.iter().take(length) {
-        if byte < &ASCII_DIGIT_MIN || byte > &ASCII_DIGIT_MAX {
-            return false;
-        }
-    }
-
-    true
+pub fn is_ascii_numeric(s: &str) -> bool {
+    s.chars().all(|c| c.is_ascii_digit())
 }
 
 #[cfg(test)]
 mod tests {
     use super::compute_check_digit;
-    use super::is_number;
+    use super::is_ascii_numeric;
     use super::zero_pad;
 
     #[test]
@@ -93,17 +81,18 @@ mod tests {
     }
 
     #[test]
-    fn is_number_valid_numbers() {
-        assert_eq!(is_number("0".as_bytes(), 1), true);
-        assert_eq!(is_number("1".as_bytes(), 1), true);
-        assert_eq!(is_number("00".as_bytes(), 2), true);
+    fn is_ascii_numeric_valid_numbers() {
+        assert_eq!(is_ascii_numeric("0"), true);
+        assert_eq!(is_ascii_numeric("1"), true);
+        assert_eq!(is_ascii_numeric("00"), true);
+        assert_eq!(is_ascii_numeric("99"), true);
     }
 
     #[test]
-    fn is_number_invalid_numbers() {
-        assert_eq!(is_number("a".as_bytes(), 1), false);
-        assert_eq!(is_number("0a".as_bytes(), 2), false);
-        assert_eq!(is_number("-1".as_bytes(), 2), false);
-        assert_eq!(is_number("4.2".as_bytes(), 3), false);
+    fn is_ascii_numeric_invalid_numbers() {
+        assert_eq!(is_ascii_numeric("a"), false);
+        assert_eq!(is_ascii_numeric("0a"), false);
+        assert_eq!(is_ascii_numeric("-1"), false);
+        assert_eq!(is_ascii_numeric("4.2"), false);
     }
 }
