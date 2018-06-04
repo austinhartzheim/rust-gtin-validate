@@ -22,7 +22,7 @@ include = [
 [dependencies]
 
 [dev-dependencies]
-criterion = "0.2"
+criterion = { version = "0.2", features=['real_blackbox'] }
 
 [[bench]]
 name = "gtin8"
