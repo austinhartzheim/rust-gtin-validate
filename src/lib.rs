@@ -8,6 +8,10 @@
 //! that can be accidentally introduced during data entry or spreadsheet
 //! conversion.
 
+#[cfg(test)]
+#[macro_use]
+extern crate proptest;
+
 // private modules for internal use
 mod utils;
 

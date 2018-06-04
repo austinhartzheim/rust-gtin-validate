@@ -34,7 +34,7 @@ pub fn check(code: &str) -> bool {
 
     // Calculate and compare check digit
     let bytes = code.as_bytes();
-    let check = utils::compute_check_digit(bytes, 8);
+    let check = utils::compute_check_digit(bytes);
     if check != bytes[7] - 48 {
         return false;
     }
@@ -151,5 +151,12 @@ mod tests {
         assert!(fix("0").is_ok());
         assert_eq!(fix("0").unwrap(), "00000000");
         assert_eq!(fix("9944220").unwrap(), "09944220");
+    }
+
+    proptest! {
+        #[test]
+        fn doesnt_crash(ref s in ".*") {
+            check(s);
+        }
     }
 }

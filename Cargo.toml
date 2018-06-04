@@ -23,7 +23,9 @@ include = [
 
 [dev-dependencies]
 criterion = "0.2"
+# Enhanced criterion blackbox functionality is only available on nightly for now.
 #criterion = { version = "0.2", features = ['real_blackbox'] }
+proptest = "0.7"
 
 [[bench]]
 name = "gtin8"

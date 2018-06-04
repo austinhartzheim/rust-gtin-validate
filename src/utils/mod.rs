@@ -1,6 +1,6 @@
 /// Compute the check digit for a GTIN code as described on the
 /// [GS1 website](http://www.gs1.org/how-calculate-check-digit-manually)
-pub fn compute_check_digit(bytes: &[u8], size: usize) -> u8 {
+pub fn compute_check_digit(bytes: &[u8]) -> u8 {
     let mut even: u16 = 0;
     let mut odd: u16 = 0;
     let mut check: u8;
@@ -8,8 +8,8 @@ pub fn compute_check_digit(bytes: &[u8], size: usize) -> u8 {
 
     // Read GTIN in reverse because the even/odd columns are defined
     // right-to-left, with the last non-check-digit column being odd.
-    for i in 2..size + 1 {
-        curr = bytes[size - i] - 48;
+    for i in 2..bytes.len() + 1 {
+        curr = bytes[bytes.len() - i] - 48;
         if i % 2 == 0 {
             odd += curr as u16;
         } else {
@@ -53,19 +53,21 @@ mod tests {
     use super::is_ascii_numeric;
     use super::zero_pad;
 
+    use proptest::prelude::*;
+
     #[test]
     fn compute_check_digit_static_data() {
-        assert_eq!(compute_check_digit("000000000000".as_bytes(), 12), 0);
-        assert_eq!(compute_check_digit("123456789012".as_bytes(), 12), 2);
-        assert_eq!(compute_check_digit("123456789081".as_bytes(), 12), 1);
-        assert_eq!(compute_check_digit("036000291452".as_bytes(), 12), 2);
-        assert_eq!(compute_check_digit("999999999993".as_bytes(), 12), 3);
-        assert_eq!(compute_check_digit("0000000000000".as_bytes(), 13), 0);
-        assert_eq!(compute_check_digit("1234123412344".as_bytes(), 13), 4);
-        assert_eq!(compute_check_digit("9249874313545".as_bytes(), 13), 5);
-        assert_eq!(compute_check_digit("00000000000000".as_bytes(), 14), 0);
-        assert_eq!(compute_check_digit("01010101010104".as_bytes(), 14), 4);
-        assert_eq!(compute_check_digit("92498743135447".as_bytes(), 14), 7);
+        assert_eq!(compute_check_digit("000000000000".as_bytes()), 0);
+        assert_eq!(compute_check_digit("123456789012".as_bytes()), 2);
+        assert_eq!(compute_check_digit("123456789081".as_bytes()), 1);
+        assert_eq!(compute_check_digit("036000291452".as_bytes()), 2);
+        assert_eq!(compute_check_digit("999999999993".as_bytes()), 3);
+        assert_eq!(compute_check_digit("0000000000000".as_bytes()), 0);
+        assert_eq!(compute_check_digit("1234123412344".as_bytes()), 4);
+        assert_eq!(compute_check_digit("9249874313545".as_bytes()), 5);
+        assert_eq!(compute_check_digit("00000000000000".as_bytes()), 0);
+        assert_eq!(compute_check_digit("01010101010104".as_bytes()), 4);
+        assert_eq!(compute_check_digit("92498743135447".as_bytes()), 7);
     }
 
     #[test]
@@ -94,5 +96,12 @@ mod tests {
         assert_eq!(is_ascii_numeric("0a"), false);
         assert_eq!(is_ascii_numeric("-1"), false);
         assert_eq!(is_ascii_numeric("4.2"), false);
+    }
+
+    proptest! {
+        #[test]
+        fn compute_check_digit_doesnt_crash(ref code in "[0-9]*") {
+            assert!(compute_check_digit(code.as_bytes()) < 10);
+        }
     }
 }
