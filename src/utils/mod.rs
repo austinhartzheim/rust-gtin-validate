@@ -1,5 +1,7 @@
 /// Compute the check digit for a GTIN code as described on the
 /// [GS1 website](http://www.gs1.org/how-calculate-check-digit-manually)
+/// This function assumes that the passed in bytes are already
+/// guaranteed to be ASCII digits (eg, by calling is_ascii_numeric).
 pub fn compute_check_digit(bytes: &[u8]) -> u8 {
     let mut even: u16 = 0;
     let mut odd: u16 = 0;
