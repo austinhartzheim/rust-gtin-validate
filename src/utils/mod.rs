@@ -11,9 +11,9 @@ pub fn compute_check_digit(bytes: &[u8]) -> u8 {
     for i in 2..bytes.len() + 1 {
         curr = bytes[bytes.len() - i] - 48;
         if i % 2 == 0 {
-            odd += curr as u16;
+            odd += u16::from(curr);
         } else {
-            even += curr as u16;
+            even += u16::from(curr);
         }
     }
 

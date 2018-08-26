@@ -13,7 +13,7 @@
 extern crate proptest;
 
 // private modules for internal use
-mod utils;
+pub mod utils;
 
 // public modules
 pub mod gtin12;
