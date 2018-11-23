@@ -3,7 +3,7 @@
 use utils;
 
 /// Errors that make GTIN-14 correction impossible.
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum FixError {
     /// The provided string contains non-ASCII characters.
     NonAsciiString,
