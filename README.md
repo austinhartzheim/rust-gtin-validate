@@ -37,7 +37,7 @@ fn gtin14::fix(code: &str) -> Result<String, FixError>
 
 For example, you can validate UPC-A codes:
 ```rust
-extern create gtin_validate;
+extern crate gtin_validate;
 use gtin_validate::gtin12;
 
 assert_eq!(gtin12::check("000000000000"), true);
