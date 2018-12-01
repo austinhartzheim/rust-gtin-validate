@@ -48,7 +48,7 @@ assert_eq!(gtin12::check("000000000001"), false);
 You can add this line to your Cargo.toml file:
 ```toml
 [dependencies]
-gtin-validate = "1.0.0"
+gtin-validate = "1.2.0"
 ```
 
 ## Contributing
