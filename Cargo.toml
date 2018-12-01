@@ -45,3 +45,4 @@ harness = false
 
 [badges]
 travis-ci = { repository = "austinhartzheim/rust-gtin-validate" }
+coveralls = { repository = "austinhartzheim/rust-gtin-validate", branch = "master", service = "github" }
