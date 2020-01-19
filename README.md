@@ -6,7 +6,7 @@
 Validate and correct GTIN codes, such as UPC-A and EAN-13, in Rust.
 
 ## Features
-Currenly supported types:
+Currently supported types:
 * GTIN-8
 * GTIN-12 (UPC-A)
 * GTIN-13 (EAN-13)
