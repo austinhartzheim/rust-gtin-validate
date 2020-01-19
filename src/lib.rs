@@ -8,6 +8,8 @@
 //! that can be accidentally introduced during data entry or spreadsheet
 //! conversion.
 
+#![forbid(unsafe_code)]
+
 #[cfg(test)]
 #[macro_use]
 extern crate proptest;
