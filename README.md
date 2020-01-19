@@ -14,31 +14,32 @@ Currenly supported types:
 
 Validation features include:
 * Check that the string contains the correct number of digits
-* Compute the check-digit and confirming that it matches
+* Compute the check-digit and confirm that it matches
 
 Correction features include:
-* Add zero-padding (some software treat these codes as integers)
+* Add zero-padding (some software treats these codes as integers)
 * Strip whitespace from both sides of the code
 
 ## How to use
-For full details, check [the documentation](https://docs.austinhartzheim.me/rust/gtin_validate/).
+For full details, check [the documentation](https://docs.rs/gtin-validate/).
 
 Briefly, here are the function declarations:
 ```rust
 // return true if the code is valid, false otherwise
-fn gtin12::check(code: &str) -> bool
-fn gtin13::check(code: &str) -> bool
-fn gtin14::check(code: &str) -> bool
+fn gtin8::check(code: &str) -> bool;
+fn gtin12::check(code: &str) -> bool;
+fn gtin13::check(code: &str) -> bool;
+fn gtin14::check(code: &str) -> bool;
 
 // return a corrected String or Err
-fn gtin12::fix(code: &str) -> Result<String, FixError>
-fn gtin13::fix(code: &str) -> Result<String, FixError>
-fn gtin14::fix(code: &str) -> Result<String, FixError>
+fn gtin8::fix(code: &str) -> Result<String, FixError>;
+fn gtin12::fix(code: &str) -> Result<String, FixError>;
+fn gtin13::fix(code: &str) -> Result<String, FixError>;
+fn gtin14::fix(code: &str) -> Result<String, FixError>;
 ```
 
 For example, you can validate UPC-A codes:
 ```rust
-extern crate gtin_validate;
 use gtin_validate::gtin12;
 
 assert_eq!(gtin12::check("000000000000"), true);
