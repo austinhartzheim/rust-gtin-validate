@@ -95,6 +95,7 @@ pub fn fix(code: &str) -> Result<String, FixError> {
 mod tests {
     use super::check;
     use super::fix;
+    use super::FixError;
 
     #[test]
     fn check_valid() {
@@ -144,6 +145,16 @@ mod tests {
     #[test]
     fn fix_non_ascii() {
         assert!(fix("❤").is_err());
+    }
+
+    #[test]
+    fn fix_too_long() {
+        assert_eq!(fix("000000000000000"), Err(FixError::TooLong));
+    }
+
+    #[test]
+    fn fix_incorrect_check_digit() {
+        assert_eq!(fix("17342894127889"), Err(FixError::CheckDigitIncorrect));
     }
 
     #[test]
