@@ -63,7 +63,8 @@ pub fn check(code: &str) -> bool {
         bytes[8], bytes[9], bytes[10], bytes[11], bytes[12], 48,
     );
 
-    utils::check_ascii_simd(vect) && utils::compute_check_digit_simd(vect - 48) + 48 == bytes[13]
+    utils::check_ascii_simd_u8x16(vect)
+        && utils::compute_check_digit_u8x16(vect - 48) + 48 == bytes[13]
 }
 
 /// Attempt to fix an invalid GTIN-14 code by stripping whitespace from

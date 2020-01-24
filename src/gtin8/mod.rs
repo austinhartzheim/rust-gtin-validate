@@ -58,12 +58,12 @@ pub fn check(code: &str) -> bool {
     }
 
     let bytes = code.as_bytes();
-    let vect = packed_simd::u8x16::new(
-        48, 48, 48, 48, 48, 48, 48, 48, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5],
-        bytes[6], 48,
+    let vect = packed_simd::u8x8::new(
+        bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5], bytes[6], 48,
     );
 
-    utils::check_ascii_simd(vect) && utils::compute_check_digit_simd(vect - 48) + 48 == bytes[7]
+    utils::check_ascii_simd_u8x8(vect)
+        && utils::compute_check_digit_u8x8(vect - 48) + 48 == bytes[7]
 }
 
 /// Attempt to fix an invalid GTIN-8 code by stripping whitespace from
