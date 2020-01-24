@@ -18,7 +18,12 @@ include = [
     "LICENSE-APACHE"
 ]
 
+[features]
+simd = ["packed_simd"]
+
 [dependencies]
+# packed_simd = { version = "0.3.3", optional = true }
+packed_simd = { git = "https://github.com/rust-lang/packed_simd.git", optional = true }
 
 [dev-dependencies]
 criterion = "0.3"

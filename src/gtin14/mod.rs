@@ -24,6 +24,7 @@ pub enum FixError {
 /// assert_eq!(gtin14::check("1456781598346"), false);  // too short
 /// assert_eq!(gtin14::check("14567815983468"), false); // Bad check digit
 /// ```
+#[cfg(not(feature = "simd"))]
 pub fn check(code: &str) -> bool {
     if code.len() != 14 {
         return false;
@@ -35,11 +36,34 @@ pub fn check(code: &str) -> bool {
     // Calculate and compare check digit
     let bytes = code.as_bytes();
     let check = utils::compute_check_digit(bytes);
-    if check != bytes[13] - 48 {
+
+    check + 48 == bytes[13]
+}
+
+/// Check that a GTIN-14 code is valid by confirming that it is exactly
+/// 14 digits in length and that the check-digit is correct.
+///
+/// # Examples
+/// ```
+/// use gtin_validate::gtin14;
+///
+/// assert_eq!(gtin14::check("14567815983469"), true);  // Valid GTIN-14
+/// assert_eq!(gtin14::check("1456781598346"), false);  // too short
+/// assert_eq!(gtin14::check("14567815983468"), false); // Bad check digit
+/// ```
+#[cfg(feature = "simd")]
+pub fn check(code: &str) -> bool {
+    if code.len() != 14 {
         return false;
     }
 
-    true
+    let bytes = code.as_bytes();
+    let vect = packed_simd::u8x16::new(
+        48, 48, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5], bytes[6], bytes[7],
+        bytes[8], bytes[9], bytes[10], bytes[11], bytes[12], 48,
+    );
+
+    utils::check_ascii_simd(vect) && utils::compute_check_digit_simd(vect - 48) + 48 == bytes[13]
 }
 
 /// Attempt to fix an invalid GTIN-14 code by stripping whitespace from

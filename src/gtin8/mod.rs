@@ -24,6 +24,7 @@ pub enum FixError {
 /// assert_eq!(gtin8::check("1456781"), false);  // too short
 /// assert_eq!(gtin8::check("14567811"), false); // Bad check digit
 /// ```
+#[cfg(not(feature = "simd"))]
 pub fn check(code: &str) -> bool {
     if code.len() != 8 {
         return false;
@@ -35,11 +36,34 @@ pub fn check(code: &str) -> bool {
     // Calculate and compare check digit
     let bytes = code.as_bytes();
     let check = utils::compute_check_digit(bytes);
-    if check != bytes[7] - 48 {
+
+    check + 48 == bytes[7]
+}
+
+/// Check that a GTIN-8 code is valid by confirming that it is exactly
+/// 8 digits in length and that the check-digit is correct.
+///
+/// # Examples
+/// ```
+/// use gtin_validate::gtin8;
+///
+/// assert_eq!(gtin8::check("14567810"), true);  // Valid GTIN-8
+/// assert_eq!(gtin8::check("1456781"), false);  // too short
+/// assert_eq!(gtin8::check("14567811"), false); // Bad check digit
+/// ```
+#[cfg(feature = "simd")]
+pub fn check(code: &str) -> bool {
+    if code.len() != 8 {
         return false;
     }
 
-    true
+    let bytes = code.as_bytes();
+    let vect = packed_simd::u8x16::new(
+        48, 48, 48, 48, 48, 48, 48, 48, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5],
+        bytes[6], 48,
+    );
+
+    utils::check_ascii_simd(vect) && utils::compute_check_digit_simd(vect - 48) + 48 == bytes[7]
 }
 
 /// Attempt to fix an invalid GTIN-8 code by stripping whitespace from

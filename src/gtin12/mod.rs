@@ -24,6 +24,7 @@ pub enum FixError {
 /// assert_eq!(gtin12::check("89785461331"), false);  // Too short
 /// assert_eq!(gtin12::check("897854613318"), false); // Bad check digit
 /// ```
+#[cfg(not(feature = "simd"))]
 pub fn check(code: &str) -> bool {
     if code.len() != 12 {
         return false;
@@ -35,11 +36,34 @@ pub fn check(code: &str) -> bool {
     // Calculate and compare check digit
     let bytes = code.as_bytes();
     let check = utils::compute_check_digit(bytes);
-    if check != bytes[11] - 48 {
+
+    check + 48 == bytes[11]
+}
+
+// Check that a UPC-A code is valid by confirming that it is made of
+/// exactly 12 digits and that the check-digit is correct.
+///
+/// # Examples
+/// ```
+/// use gtin_validate::gtin12;
+///
+/// assert_eq!(gtin12::check("897854613315"), true);  // Valid GTIN-12
+/// assert_eq!(gtin12::check("89785461331"), false);  // Too short
+/// assert_eq!(gtin12::check("897854613318"), false); // Bad check digit
+/// ```
+#[cfg(feature = "simd")]
+pub fn check(code: &str) -> bool {
+    if code.len() != 12 {
         return false;
     }
 
-    true
+    let bytes = code.as_bytes();
+    let vect = packed_simd::u8x16::new(
+        48, 48, 48, 48, bytes[0], bytes[1], bytes[2], bytes[3], bytes[4], bytes[5], bytes[6],
+        bytes[7], bytes[8], bytes[9], bytes[10], 48,
+    );
+
+    utils::check_ascii_simd(vect) && utils::compute_check_digit_simd(vect - 48) + 48 == bytes[11]
 }
 
 /// Attempt to fix invalid UPC codes by stripping whitespace from the

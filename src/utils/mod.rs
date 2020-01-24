@@ -1,7 +1,11 @@
+#[cfg(feature = "simd")]
+use std::ops::BitOr;
+
 /// Compute the check digit for a GTIN code as described on the
 /// [GS1 website](http://www.gs1.org/how-calculate-check-digit-manually)
 /// This function assumes that the passed in bytes are already
 /// guaranteed to be ASCII digits (eg, by calling is_ascii_numeric).
+#[cfg(not(feature = "simd"))]
 pub fn compute_check_digit(bytes: &[u8]) -> u8 {
     let mut even: u16 = 0;
     let mut odd: u16 = 0;
@@ -27,6 +31,29 @@ pub fn compute_check_digit(bytes: &[u8]) -> u8 {
     check
 }
 
+#[cfg(feature = "simd")]
+#[inline]
+pub fn check_ascii_simd(vect: packed_simd::u8x16) -> bool {
+    static GT: packed_simd::u8x16 = packed_simd::u8x16::splat(57);
+    static LT: packed_simd::u8x16 = packed_simd::u8x16::splat(48);
+    let res = vect.gt(GT).bitor(vect.lt(LT));
+    res.none()
+}
+
+#[cfg(feature = "simd")]
+#[inline]
+pub fn compute_check_digit_simd(mut vect: packed_simd::u8x16) -> u8 {
+    static MUL: packed_simd::u8x16 =
+        packed_simd::u8x16::new(3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1, 3, 1);
+    vect *= MUL;
+    let check = vect.wrapping_sum() % 10;
+    if check > 0 {
+        10 - check
+    } else {
+        check
+    }
+}
+
 /// Add zeros to the left side of a string so that it matches the
 /// desired length.
 ///
@@ -46,11 +73,13 @@ pub fn zero_pad(upc: String, size: usize) -> String {
 }
 
 #[inline]
+#[cfg(not(feature = "simd"))]
 pub fn is_ascii_numeric(s: &str) -> bool {
     s.chars().all(|c| c.is_ascii_digit())
 }
 
 #[cfg(test)]
+#[cfg(not(feature = "simd"))]
 mod tests {
     use super::compute_check_digit;
     use super::is_ascii_numeric;
@@ -106,5 +135,82 @@ mod tests {
         fn compute_check_digit_doesnt_crash(ref code in "[0-9]*") {
             assert!(compute_check_digit(code.as_bytes()) < 10);
         }
+    }
+}
+
+#[cfg(test)]
+#[cfg(feature = "simd")]
+mod simd_tests {
+    use super::check_ascii_simd;
+    use super::compute_check_digit_simd;
+
+    #[test]
+    fn simd_compute_check_digit_static_data() {
+        assert_eq!(compute_check_digit_simd(packed_simd::u8x16::splat(0)), 0);
+        assert_eq!(
+            compute_check_digit_simd(packed_simd::u8x16::new(
+                0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 1, 0
+            )),
+            2
+        );
+        assert_eq!(
+            compute_check_digit_simd(packed_simd::u8x16::new(
+                0, 0, 0, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, 8, 0
+            )),
+            1
+        );
+        assert_eq!(
+            compute_check_digit_simd(packed_simd::u8x16::new(
+                0, 0, 0, 0, 0, 3, 6, 0, 0, 0, 2, 9, 1, 4, 5, 0
+            )),
+            2
+        );
+        assert_eq!(
+            compute_check_digit_simd(packed_simd::u8x16::new(
+                0, 0, 0, 0, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 0
+            )),
+            3
+        );
+        assert_eq!(
+            compute_check_digit_simd(packed_simd::u8x16::new(
+                0, 0, 0, 9, 2, 4, 9, 8, 7, 4, 3, 1, 3, 5, 4, 0
+            )),
+            5
+        );
+        assert_eq!(
+            compute_check_digit_simd(packed_simd::u8x16::new(
+                0, 0, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 1, 0, 0
+            )),
+            4
+        );
+        assert_eq!(
+            compute_check_digit_simd(packed_simd::u8x16::new(
+                0, 0, 9, 2, 4, 9, 8, 7, 4, 3, 1, 3, 5, 4, 4, 0
+            )),
+            7
+        );
+        assert_eq!(
+            compute_check_digit_simd(packed_simd::u8x16::new(
+                0, 0, 0, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 0
+            )),
+            4
+        );
+    }
+
+    #[test]
+    fn simd_is_ascii_numeric_valid_numbers() {
+        assert!(check_ascii_simd(packed_simd::u8x16::splat(48)));
+        assert!(check_ascii_simd(packed_simd::u8x16::splat(49)));
+        assert!(check_ascii_simd(packed_simd::u8x16::splat(56)));
+        assert!(check_ascii_simd(packed_simd::u8x16::splat(57)));
+    }
+
+    #[test]
+    fn simd_is_ascii_numeric_invalid_numbers() {
+        assert!(!check_ascii_simd(packed_simd::u8x16::splat(0)));
+        assert!(!check_ascii_simd(packed_simd::u8x16::splat(47)));
+        assert!(!check_ascii_simd(packed_simd::u8x16::splat(58)));
+        assert!(!check_ascii_simd(packed_simd::u8x16::splat(128)));
+        assert!(!check_ascii_simd(packed_simd::u8x16::splat(255)));
     }
 }
