@@ -45,6 +45,7 @@ pub fn zero_pad(upc: String, size: usize) -> String {
     padded
 }
 
+#[inline]
 pub fn is_ascii_numeric(s: &str) -> bool {
     s.chars().all(|c| c.is_ascii_digit())
 }
