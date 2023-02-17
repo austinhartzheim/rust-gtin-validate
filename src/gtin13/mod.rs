@@ -1,5 +1,7 @@
 //! Performs validation and correction of GTIN-13 and EAN-13 codes.
 
+use std::error::Error;
+use std::fmt;
 use utils;
 
 /// Errors that make GTIN-13 correction impossible.
@@ -11,6 +13,23 @@ pub enum FixError {
     TooLong,
     /// The calculated check-digit did not match the code's check-digit.
     CheckDigitIncorrect,
+}
+
+impl Error for FixError {}
+
+impl fmt::Display for FixError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FixError::NonAsciiString => {
+                write!(f, "the provided string contains non-ASCII characters")
+            }
+            FixError::TooLong => write!(f, "the provided code was too long too be valid"),
+            FixError::CheckDigitIncorrect => write!(
+                f,
+                "the calculated check-digit did not match the code's check-digit"
+            ),
+        }
+    }
 }
 
 /// Check that a GTIN-13 code is valid by checking the length (should be
@@ -151,7 +170,6 @@ mod tests {
     fn fix_non_ascii() {
         assert!(fix("❤").is_err());
     }
-
 
     #[test]
     fn fix_too_long() {
