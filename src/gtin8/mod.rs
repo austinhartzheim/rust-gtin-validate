@@ -1,5 +1,7 @@
 //! Performs validation and correction of GTIN-8 codes.
 
+use std::error::Error;
+use std::fmt;
 use utils;
 
 /// Errors that make GTIN-8 correction impossible.
@@ -11,6 +13,23 @@ pub enum FixError {
     TooLong,
     /// The calculated check-digit did not match the code's check-digit.
     CheckDigitIncorrect,
+}
+
+impl Error for FixError {}
+
+impl fmt::Display for FixError {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FixError::NonAsciiString => {
+                write!(f, "the provided string contains non-ASCII characters")
+            }
+            FixError::TooLong => write!(f, "the provided code was too long too be valid"),
+            FixError::CheckDigitIncorrect => write!(
+                f,
+                "the calculated check-digit did not match the code's check-digit"
+            ),
+        }
+    }
 }
 
 /// Check that a GTIN-8 code is valid by confirming that it is exactly
